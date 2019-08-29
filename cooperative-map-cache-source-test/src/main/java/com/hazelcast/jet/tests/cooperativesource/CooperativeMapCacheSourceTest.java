@@ -33,7 +33,6 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
-import javax.cache.Cache;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.MINUTES;
@@ -56,7 +55,7 @@ public class CooperativeMapCacheSourceTest extends AbstractSoakTest {
     private static final int PREDICATE_FROM = 500;
     private static final int EXPECTED_SIZE_AFTER_PREDICATE = SOURCE_MAP_ITEMS - PREDICATE_FROM;
 
-//    private static final int DURATION_DELETE_THIS = 10_000;
+//    private static final int DURATION_DELETE_THIS = 300_000;
     private static final int DEFAULT_THREAD_COUNT = 1;
 
     private int threadCount;
@@ -74,6 +73,7 @@ public class CooperativeMapCacheSourceTest extends AbstractSoakTest {
     private int[] remoteCacheSequence;
 
     public static void main(String[] args) throws Exception {
+        System.out.println("RUNNING MAIN METHOD");
         new CooperativeMapCacheSourceTest().run(args);
     }
 
@@ -329,11 +329,11 @@ public class CooperativeMapCacheSourceTest extends AbstractSoakTest {
 //        return new JetClientConfig();
     }
 
-    private void initializeSourceCache() {
-        Cache<Integer, String> cache = jet.getCacheManager().getCache(SOURCE_CACHE);
-        for (int i = 0; i < SOURCE_MAP_ITEMS; i++) {
-            cache.put(i, Integer.toString(i));
-        }
-    }
+//    private void initializeSourceCache() {
+//        Cache<Integer, String> cache = jet.getCacheManager().getCache(SOURCE_CACHE);
+//        for (int i = 0; i < SOURCE_MAP_ITEMS; i++) {
+//            cache.put(i, Integer.toString(i));
+//        }
+//    }
 
 }

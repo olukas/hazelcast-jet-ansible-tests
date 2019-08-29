@@ -38,12 +38,12 @@
             <artifactId>soak-tests-common</artifactId>
             <version>${jet.version}</version>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>javax.cache</groupId>
             <artifactId>cache-api</artifactId>
-            <version>1.1.0</version>
+            <version>1.1.1</version>
             <type>jar</type>
-        </dependency>
+        </dependency>-->
     </dependencies>
 
     <build>

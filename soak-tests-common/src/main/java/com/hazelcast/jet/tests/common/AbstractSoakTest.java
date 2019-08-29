@@ -50,7 +50,9 @@ public abstract class AbstractSoakTest implements Serializable {
             instances = new JetInstance[]{Jet.newJetInstance(), Jet.newJetInstance()};
             jet = Jet.newJetClient();
         } else {
+            System.out.println("BEFORE BOOTSTRAP");
             jet = JetBootstrap.getInstance();
+            System.out.println("AFTER BOOTSTRAP");
         }
         logger = getLogger(getClass());
 
