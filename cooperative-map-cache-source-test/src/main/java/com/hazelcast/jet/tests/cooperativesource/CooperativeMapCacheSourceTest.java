@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
+import javax.cache.Cache;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.MINUTES;
@@ -48,20 +49,19 @@ public class CooperativeMapCacheSourceTest extends AbstractSoakTest {
     private static final String SINK_QUERY_LOCAL_MAP = TEST_PREFIX + "_SinkQueryLocalMap";
     private static final String SINK_QUERY_REMOTE_MAP = TEST_PREFIX + "_SinkQueryRemoteMap";
     private static final String SOURCE_CACHE = TEST_PREFIX + "_SourceCache";
-    private static final int SOURCE_MAP_ITEMS = 1_000;
+    private static final int SOURCE_MAP_ITEMS = 1_000_000;
     private static final int SOURCE_MAP_LAST_KEY = SOURCE_MAP_ITEMS - 1;
-    private static final int SOURCE_CACHE_ITEMS = 1_000;
+    private static final int SOURCE_CACHE_ITEMS = 1_000_000;
     private static final int SOURCE_CACHE_LAST_KEY = SOURCE_CACHE_ITEMS - 1;
-    private static final int PREDICATE_FROM = 500;
+    private static final int PREDICATE_FROM = 500_000;
     private static final int EXPECTED_SIZE_AFTER_PREDICATE = SOURCE_MAP_ITEMS - PREDICATE_FROM;
 
-//    private static final int DURATION_DELETE_THIS = 300_000;
     private static final int DEFAULT_THREAD_COUNT = 1;
 
     private int threadCount;
     /**
      * I'm deliberately use only one instance of Exception instead of something like Exception per source type. <br/>
-     * We will stop all tests once when any Exception occurs
+     * We will stop all tests once when any Exception occurs.
      */
     private volatile Exception exception;
 
@@ -73,13 +73,11 @@ public class CooperativeMapCacheSourceTest extends AbstractSoakTest {
     private int[] remoteCacheSequence;
 
     public static void main(String[] args) throws Exception {
-        System.out.println("RUNNING MAIN METHOD");
         new CooperativeMapCacheSourceTest().run(args);
     }
 
     @Override
     public void init() {
-//        durationInMillis = DURATION_DELETE_THIS;
         threadCount = propertyInt("cooperative_map_cache_thread_count", DEFAULT_THREAD_COUNT);
         localMapSequence = new int[threadCount];
         remoteMapSequence = new int[threadCount];
@@ -89,7 +87,7 @@ public class CooperativeMapCacheSourceTest extends AbstractSoakTest {
         remoteCacheSequence = new int[threadCount];
 
         initializeSourceMap();
-//        initializeSourceCache();
+        initializeSourceCache();
     }
     @Override
     public void test() throws Exception {
@@ -114,16 +112,16 @@ public class CooperativeMapCacheSourceTest extends AbstractSoakTest {
                 threadIndex -> verifyQueryRemoteMapJob(threadIndex),
                 queryRemoteMapSequence
         ));
-//        executorServices.add(runTestInExecutorService(
-//                threadIndex -> executeLocalCacheJob(threadIndex),
-//                threadIndex -> verifyLocalCacheJob(threadIndex),
-//                localCacheSequence
-//        ));
-//        executorServices.add(runTestInExecutorService(
-//                threadIndex -> executeRemoteCacheJob(threadIndex),
-//                threadIndex -> verifyRemoteCacheJob(threadIndex),
-//                remoteCacheSequence
-//        ));
+        executorServices.add(runTestInExecutorService(
+                threadIndex -> executeLocalCacheJob(threadIndex),
+                threadIndex -> verifyLocalCacheJob(threadIndex),
+                localCacheSequence
+        ));
+        executorServices.add(runTestInExecutorService(
+                threadIndex -> executeRemoteCacheJob(threadIndex),
+                threadIndex -> verifyRemoteCacheJob(threadIndex),
+                remoteCacheSequence
+        ));
 
         awaitExecutorServiceTermination(executorServices);
 
@@ -326,14 +324,13 @@ public class CooperativeMapCacheSourceTest extends AbstractSoakTest {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
-//        return new JetClientConfig();
     }
 
-//    private void initializeSourceCache() {
-//        Cache<Integer, String> cache = jet.getCacheManager().getCache(SOURCE_CACHE);
-//        for (int i = 0; i < SOURCE_MAP_ITEMS; i++) {
-//            cache.put(i, Integer.toString(i));
-//        }
-//    }
+    private void initializeSourceCache() {
+        Cache<Integer, String> cache = jet.getCacheManager().getCache(SOURCE_CACHE);
+        for (int i = 0; i < SOURCE_MAP_ITEMS; i++) {
+            cache.put(i, Integer.toString(i));
+        }
+    }
 
 }
