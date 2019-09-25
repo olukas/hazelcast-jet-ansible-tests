@@ -95,7 +95,7 @@ public final class TransactionGenerator {
     }
 
     private Object[] createSnapshot() {
-        logger.finest(String.format("Create snapshot txId: %d, isStart: %b", txId, start));
+        logger.info(String.format("Create snapshot txId: %d, isStart: %b", txId, start));
         return new Object[]{txId, start};
     }
 
@@ -103,7 +103,7 @@ public final class TransactionGenerator {
         Object[] pair = list.get(0);
         txId = (Long) pair[0];
         start = (Boolean) pair[1];
-        logger.finest(String.format("Restore snapshot txId: %d, isStart: %b", txId, start));
+        logger.info(String.format("Restore snapshot txId: %d, isStart: %b", txId, start));
     }
 
     private void close() {
