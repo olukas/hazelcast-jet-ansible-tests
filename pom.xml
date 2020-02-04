@@ -10,7 +10,7 @@
     <version>4.0-SNAPSHOT</version>
     <description>Soak Tests for Hazelcast Jet</description>
     <modules>
-        <module>async-transform-test</module>
+        <!--<module>async-transform-test</module>-->
         <module>cooperative-map-cache-source-test</module>
         <module>early-results-test</module>
         <module>event-journal-test</module>
