@@ -106,7 +106,7 @@ public class StatefulMapTest extends AbstractSoakTest {
 
     @Override
     protected boolean runOnBothClusters() {
-        return true;
+        return false;
     }
 
     @Override
@@ -125,6 +125,7 @@ public class StatefulMapTest extends AbstractSoakTest {
                 .setName(name)
                 .setProcessingGuarantee(EXACTLY_ONCE)
                 .setSnapshotIntervalMillis(snapshotIntervalMillis);
+        jobConfig.addClass(StatefulMapTest.class);
 
         Job job = client.newJob(buildPipeline(name), jobConfig);
 
