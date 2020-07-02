@@ -32,6 +32,7 @@ import static com.hazelcast.jet.impl.util.Util.uncheckRun;
 import static com.hazelcast.jet.tests.common.Util.sleepMillis;
 import static com.hazelcast.jet.tests.snapshot.jdbc.JdbcSinkTest.DataSourceSupplier.getDataSourceSupplier;
 import static com.hazelcast.jet.tests.snapshot.jdbc.JdbcSinkTest.TABLE_PREFIX;
+import static java.sql.Connection.TRANSACTION_READ_COMMITTED;
 
 public class JdbcSinkVerifier {
 
@@ -61,6 +62,7 @@ public class JdbcSinkVerifier {
         String tableName = TABLE_PREFIX + name.replaceAll("-", "_");
 
         connection = getDataSourceSupplier(connectionUrl).get().getConnection();
+        connection.setTransactionIsolation(TRANSACTION_READ_COMMITTED);
         selectStatement = connection.prepareStatement("SELECT * FROM " + tableName +
                 " ORDER BY id LIMIT " + SELECT_SIZE_LIMIT);
         deleteStatement = connection.createStatement();
