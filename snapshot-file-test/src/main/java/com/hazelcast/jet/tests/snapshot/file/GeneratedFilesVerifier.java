@@ -171,6 +171,10 @@ public class GeneratedFilesVerifier extends Thread {
         finished = true;
     }
 
+    public long getCounter() {
+        return counter;
+    }
+
     public void checkStatus() {
         if (error != null) {
             throw new RuntimeException(error);

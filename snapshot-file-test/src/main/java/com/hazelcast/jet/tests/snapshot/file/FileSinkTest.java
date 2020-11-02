@@ -58,7 +58,7 @@ public class FileSinkTest extends AbstractSoakTest {
     }
 
     @Override
-    public void test(JetInstance client, String name) {
+    public void test(JetInstance client, String name) throws InterruptedException {
         GeneratedFilesVerifier verifier = new GeneratedFilesVerifier(name, logger);
         verifier.start();
 
@@ -87,6 +87,8 @@ public class FileSinkTest extends AbstractSoakTest {
         } finally {
             verifier.finish();
         }
+        verifier.join();
+        logger.info("[" + name + "] Processed items: " + verifier.getCounter());
     }
 
     @Override
