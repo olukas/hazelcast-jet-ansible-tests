@@ -118,7 +118,7 @@ public class AttachMLModelTest extends AbstractSoakTest {
         long jobCount = 0;
         while (System.currentTimeMillis() - begin < durationInMillis) {
             JobConfig jobConfig = new JobConfig();
-            jobConfig.setName("AttachMLModelTest_10mbFile" + jobCount);
+            jobConfig.setName("AttachMLModelTest_10mbFile");
             jobConfig.attachFile(ml10mbDataPath, MODEL + jobCount);
             client.newJob(pipeline10mbFile(jobCount), jobConfig).join();
             if (jobCount % LOG_JOB_COUNT_THRESHOLD == 0) {
@@ -147,7 +147,7 @@ public class AttachMLModelTest extends AbstractSoakTest {
         long jobCount = 0;
         while (System.currentTimeMillis() - begin < durationInMillis) {
             JobConfig jobConfig = new JobConfig();
-            jobConfig.setName("AttachMLModelTest_100mbDirectory" + jobCount);
+            jobConfig.setName("AttachMLModelTest_100mbDirectory");
             jobConfig.attachDirectory(ml100mbDataPath, MODEL_LARGE + jobCount);
             client.newJob(pipeline100mbDirectory(jobCount), jobConfig).join();
             if (jobCount % LOG_JOB_COUNT_LARGE_FILE_THRESHOLD == 0) {
