@@ -16,12 +16,13 @@
 
 package com.hazelcast.jet.tests.lightjobs;
 
+import com.hazelcast.collection.IList;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.jet.Job;
-import com.hazelcast.jet.pipeline.JournalInitialPosition;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.Sources;
+import com.hazelcast.jet.pipeline.test.TestSources;
 import com.hazelcast.jet.tests.common.AbstractSoakTest;
 import com.hazelcast.map.IMap;
 
@@ -103,16 +104,27 @@ public class LightJobsTest extends AbstractSoakTest {
         map.destroy();
     }
 
+//    private void runStreamJob(HazelcastInstance client, long jobCount) {
+//        String outputName = OUTPUT_STREAM_MAP_PREFIX + jobCount;
+//        IMap<String, String> map = client.getMap(outputName);
+//        assertTrue(map.isEmpty());
+//
+//        client.getJet().newLightJob(streamPipeline(outputName));
+//        waitForMapSize(map, 20, 1000);
+//        assertEquals(itemCount, map.size());
+//
+//        map.destroy();
+//    }
     private void runStreamJob(HazelcastInstance client, long jobCount) {
         String outputName = OUTPUT_STREAM_MAP_PREFIX + jobCount;
-        IMap<String, String> map = client.getMap(outputName);
-        assertTrue(map.isEmpty());
+        IList<String> list = client.getList(outputName);
+        assertTrue(list.isEmpty());
 
         client.getJet().newLightJob(streamPipeline(outputName));
-        waitForMapSize(map, 20, 1000);
-        assertEquals(itemCount, map.size());
+        waitForListSize(list, 20, 1000);
+        assertFalse(list.isEmpty());
 
-        map.destroy();
+        list.destroy();
     }
 
     private void runIncorrectJob(HazelcastInstance client) {
@@ -136,9 +148,9 @@ public class LightJobsTest extends AbstractSoakTest {
 
     private Pipeline streamPipeline(String sinkName) {
         Pipeline p = Pipeline.create();
-        p.readFrom(Sources.mapJournal(sourceJournalMap, JournalInitialPosition.START_FROM_OLDEST))
+        p.readFrom(TestSources.itemStream(1000))
                 .withoutTimestamps()
-                .writeTo(Sinks.map(sinkName));
+                .writeTo(Sinks.list(sinkName));
         return p;
     }
 
@@ -155,10 +167,10 @@ public class LightJobsTest extends AbstractSoakTest {
         return p;
     }
 
-    private void waitForMapSize(IMap<String, String> map, int sleepBetweenAttempts, int attempts) {
+    private void waitForListSize(IList<String> list, int sleepBetweenAttempts, int attempts) {
         int counter = 0;
         while (counter < attempts) {
-            if (map.size() == itemCount) {
+            if (!list.isEmpty()) {
                 return;
             }
             sleepMillis(sleepBetweenAttempts);
