@@ -77,10 +77,10 @@ public class LightJobsTest extends AbstractSoakTest {
         long begin = System.currentTimeMillis();
         long jobCount = 0;
         while (System.currentTimeMillis() - begin < durationInMillis) {
-            runBatchJob(client, jobCount);
-            sleepMillis(sleepAfterJobMillis);
-            runStreamJob(client, jobCount);
-            sleepMillis(sleepAfterJobMillis);
+//            runBatchJob(client, jobCount);
+//            sleepMillis(sleepAfterJobMillis);
+//            runStreamJob(client, jobCount);
+//            sleepMillis(sleepAfterJobMillis);
             runIncorrectJob(client);
             sleepMillis(sleepAfterJobMillis);
 
