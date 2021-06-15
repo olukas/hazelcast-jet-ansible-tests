@@ -101,7 +101,7 @@ public class LightJobsTest extends AbstractSoakTest {
         IMap<String, String> map = client.getMap(outputName);
         assertTrue(map.isEmpty());
 
-        client.getJet().newLightJob(batchPipeline(outputName)).join();
+        client.getJet().newJob(batchPipeline(outputName)).join();
         assertEquals(itemCount, map.size());
 
         map.destroy();
@@ -112,7 +112,7 @@ public class LightJobsTest extends AbstractSoakTest {
         IMap<String, String> map = client.getMap(outputName);
         assertTrue(map.isEmpty());
 
-        Job job = client.getJet().newLightJob(streamPipeline(outputName));
+        Job job = client.getJet().newJob(streamPipeline(outputName));
         waitForMapSize(map, 20, 1000);
         job.cancel();
         assertEquals(itemCount, map.size());
@@ -121,7 +121,7 @@ public class LightJobsTest extends AbstractSoakTest {
     }
 
     private void runIncorrectJob(HazelcastInstance client) {
-        Job job = client.getJet().newLightJob(incorrectPipeline());
+        Job job = client.getJet().newJob(incorrectPipeline());
         try {
             job.join();
         } catch (RuntimeException ex) {
