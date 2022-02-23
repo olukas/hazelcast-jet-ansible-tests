@@ -69,7 +69,8 @@ public final class RemoteControllerClient {
         parseArguments(args);
         String jetHome = System.getProperty("jetHome");
         int initialSleep = parseInt(System.getProperty("initialSleepMinutes", "5"));
-        int sleepBetweenRestart = parseInt(System.getProperty("sleepBetweenRestartMinutes", "5"));
+        //int sleepBetweenRestart = parseInt(System.getProperty("sleepBetweenRestartMinutes", "5"));
+        int sleepBetweenRestart = 1;
         boolean shuffle = Boolean.parseBoolean(System.getProperty("shuffle", "true"));
         int durationInMinutes = parseInt(System.getProperty("durationInMinutes", "30")) - VERIFICATION_DURATION_GAP;
         System.out.println("RemoteController will run for " + durationInMinutes);
@@ -148,6 +149,10 @@ public final class RemoteControllerClient {
 
     private static void start(Member member) throws Exception {
         logger.info("Starting member[" + member + "]");
+        String jetHome = System.getProperty("jetHome");
+        call(member, "mv " + jetHome + "/logs/hazelcast-jet.log "
+                + jetHome + "/logs/hazelcast-jet-" + logCounter + ".beforeStart.log");
+        sleepSeconds(5);
         call(member, "sudo initctl start hazelcast-jet-isolated");
         assertMemberStarted(member);
     }
