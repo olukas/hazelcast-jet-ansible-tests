@@ -116,7 +116,7 @@ public class S3WordCountTest extends AbstractSoakTest {
                 verify(jobNumber);
                 sleepSeconds(sleepSeconds);
             } catch (Throwable e) {
-                if (isSocketRelatedException(e)) {
+                if (isSocketRelatedException(e) || tempDoReconnect(e)) {
                     logger.warning("Socket related exception ", e);
                     socketTimeoutNumber++;
                     reInitClient();
@@ -129,6 +129,11 @@ public class S3WordCountTest extends AbstractSoakTest {
         long thresholdForSocketTimeout = TimeUnit.MILLISECONDS.toHours(durationInMillis) + 1;
         logger.info(String.format("Total number of jobs finished: %d, socketTimeout: %d", jobNumber, socketTimeoutNumber));
         assertTrue("Socket timeout number is too big", thresholdForSocketTimeout > socketTimeoutNumber);
+    }
+
+    private boolean tempDoReconnect(Throwable e) {
+        logger.info("RECONNECTING due to " + e.getClass().getName() + ":" + e.getMessage());
+        return true;
     }
 
     private Pipeline pipeline() {
