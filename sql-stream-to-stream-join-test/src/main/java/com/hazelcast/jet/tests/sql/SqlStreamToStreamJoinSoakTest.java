@@ -119,10 +119,13 @@ public class SqlStreamToStreamJoinSoakTest extends AbstractSoakTest {
             // checking only event_tick to simplify our destiny.
             Long leftRowIndex = sqlRow.getObject(1);
             Long rightRowIndex = sqlRow.getObject(3);
+            logger.info("Print: " + sqlRow.toString());
+            logger.info("Comparing: " + leftRowIndex + " - " + rightRowIndex);
             AbstractSoakTest.assertEquals(leftRowIndex, rightRowIndex);
 
             currentQueryCount++;
             printProgress();
+//            Util.sleepMillis(5);
         }
 
         producerTask.stopProducingEvents();
@@ -168,8 +171,8 @@ public class SqlStreamToStreamJoinSoakTest extends AbstractSoakTest {
                 currentEventStartTime.set(currentEventStartTime.get() + EVENTS_COUNT_PER_BATCH);
                 currentEventEndTime.set(currentEventStartTime.get() + EVENTS_COUNT_PER_BATCH);
 
-                String sql = "INSERT INTO " + sourceName + " VALUES" +
-                        TestRecordProducer.produceTradeRecords(
+                String sql = "INSincorrectERT INTO " + sourceName + " VALUES"
+                        +                        TestRecordProducer.produceTradeRecords(
                                 currentEventStartTime.get(),
                                 currentEventEndTime.get(),
                                 EVENT_TIME_INTERVAL);
