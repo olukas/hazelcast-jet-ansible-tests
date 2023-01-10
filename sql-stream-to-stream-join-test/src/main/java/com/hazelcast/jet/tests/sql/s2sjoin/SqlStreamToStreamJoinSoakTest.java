@@ -134,6 +134,8 @@ public class SqlStreamToStreamJoinSoakTest extends AbstractSoakTest {
                     // checking only event_tick to simplify our destiny.
                     Long leftRowIndex = sqlRow.getObject(1);
                     Long rightRowIndex = sqlRow.getObject(3);
+                    logger.info("Print: " + sqlRow.toString());
+                    logger.info("Comparing: " + leftRowIndex + " - " + rightRowIndex);
                     AbstractSoakTest.assertEquals(leftRowIndex, rightRowIndex);
                 } catch (TimeoutException e) {
                     sqlRowFuture.cancel(true);
