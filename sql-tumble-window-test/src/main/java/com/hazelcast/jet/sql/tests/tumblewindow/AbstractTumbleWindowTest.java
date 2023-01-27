@@ -93,7 +93,7 @@ public abstract class AbstractTumbleWindowTest extends AbstractSoakTest {
         );
         assertEquals(0L, sourceMappingCreateResult.updateCount());
 
-        producerTask.produceTradeRecords(EVENT_START_TIME, EVENT_WINDOW_COUNT, false);
+//        producerTask.produceTradeRecords(EVENT_START_TIME, EVENT_WINDOW_COUNT, false);
         Util.sleepMillis(queryTimeout);
     }
 
@@ -195,7 +195,7 @@ public abstract class AbstractTumbleWindowTest extends AbstractSoakTest {
 
         private SqlResult produceTradeRecords(int currentEventStartTime, int currentEventEndTime, boolean includeLate) {
 
-            StringBuilder queryBuilder = new StringBuilder("INSERT INTO " + sourceName + " VALUES");
+            StringBuilder queryBuilder = new StringBuilder("INSRT INTO " + sourceName + " VALUES");
             queryBuilder.append(TestRecordProducer.produceTradeRecords(
                     currentEventStartTime,
                     EVENT_WINDOW_COUNT, EVENT_TIME_INTERVAL,
