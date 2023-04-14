@@ -126,9 +126,15 @@ public class GenericMapStoreTest extends AbstractSoakTest {
             try (PreparedStatement stmt = connection.prepareStatement(
                     "INSERT INTO " + tableName + "(id, name) VALUES(?, ?)")) {
                 for (int i = 1; i <= PERSON_COUNT; i++) {
-                    stmt.setInt(1, i);
-                    stmt.setString(2, "name-" + i);
-                    stmt.executeUpdate();
+                    if (i > 5000 && i < 6000) {
+                        stmt.setInt(1, i);
+                        stmt.setString(2, "name-" + (i + 1));
+                        stmt.executeUpdate();
+                    } else {
+                        stmt.setInt(1, i);
+                        stmt.setString(2, "name-" + i);
+                        stmt.executeUpdate();
+                    }
                 }
             }
         }
