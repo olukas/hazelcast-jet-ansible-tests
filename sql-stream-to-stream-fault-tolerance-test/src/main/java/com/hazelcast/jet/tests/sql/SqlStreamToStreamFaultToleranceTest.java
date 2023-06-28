@@ -93,6 +93,8 @@ public class SqlStreamToStreamFaultToleranceTest extends AbstractSoakTest {
         createKafkaDataConnection(client, sqlName);
         createMappingAndViews(client.getSql(), sqlName);
 
+        logger.info("source topic name: " + sqlName + "_" + sourceName);
+
         try (ItemProducer producer = new ItemProducer(brokerUri)) {
             producer.produceItems(sqlName + "_" + sourceName, 0, 10, 1,
                     SqlStreamToStreamFaultToleranceTest::createValue);
@@ -107,6 +109,8 @@ public class SqlStreamToStreamFaultToleranceTest extends AbstractSoakTest {
         String sinkTopic = sqlName + "_" + sinkName;
         KafkaSinkVerifier verifier = new KafkaSinkVerifier(kafkaProps, sinkTopic);
         verifier.start();
+
+        logger.info("sink topic name: " + sqlName + "_" + sinkName);
 
         Util.sleepSeconds(30);
 
