@@ -93,34 +93,51 @@ public class SqlStreamToStreamFaultToleranceTest extends AbstractSoakTest {
         createKafkaDataConnection(client, sqlName);
         createMappingAndViews(client.getSql(), sqlName);
 
+        logger.info("AAA 1 " + sqlName);
+
         try (ItemProducer producer = new ItemProducer(brokerUri)) {
             producer.produceItems(sqlName + "_" + sourceName, 0, 10, 1,
                     SqlStreamToStreamFaultToleranceTest::createValue);
         }
+        logger.info("AAA 2 " + sqlName);
         Util.sleepMillis(queryTimeout);
 
         DataIngestionTask producerTask = new DataIngestionTask(
                 brokerUri, sqlName + "_" + sourceName,
                 SqlStreamToStreamFaultToleranceTest::createValue);
+        logger.info("AAA 3 " + sqlName);
         producerExecutorService.execute(producerTask);
+        logger.info("AAA 4 " + sqlName);
 
         String sinkTopic = sqlName + "_" + sinkName;
+        logger.info("AAA 5 " + sqlName);
         KafkaSinkVerifier verifier = new KafkaSinkVerifier(name, kafkaProps, sinkTopic);
+        logger.info("AAA 6 " + sqlName);
         verifier.start();
+        logger.info("AAA 7 " + sqlName);
 
         Util.sleepSeconds(30);
 
         try {
+            logger.info("AAA 8 " + sqlName);
             createSQLJob(client, sqlName, sinkTopic);
+            logger.info("AAA 9 " + sqlName);
             Util.sleepSeconds(15);
+            logger.info("AAA 10 " + sqlName);
             verifySQLJob(client, sqlName, verifier);
+            logger.info("AAA 11 " + sqlName);
         } finally {
             try (SqlResult dropJobResult = client.getSql().execute("DROP JOB IF EXISTS \"" + sqlName + "\"")) {
+                logger.info("AAA 12 " + sqlName);
                 assertEquals(0L, dropJobResult.updateCount());
             }
+            logger.info("AAA 13 " + sqlName);
             producerTask.stopProducingEvents();
+            logger.info("AAA 14 " + sqlName);
             verifier.finish();
+            logger.info("AAA 15 " + sqlName);
         }
+        logger.info("AAA 16 " + sqlName);
     }
 
     @Override
