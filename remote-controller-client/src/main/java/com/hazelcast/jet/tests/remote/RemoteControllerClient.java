@@ -94,12 +94,12 @@ public final class RemoteControllerClient {
                 sleepMinutes(sleepBetweenRestart);
 
                 counter[0]++;
-                if (counter[0] % memberCount == 0) {
-                    shutdownCluster(member, jetHome, members);
-                    sleepSeconds(SLEEP_BETWEEN_CLUSTER_RESTART_SECONDS);
-                    startCluster(members);
-                    sleepMinutes(sleepBetweenRestart);
-                }
+//                if (counter[0] % memberCount == 0) {
+//                    shutdownCluster(member, jetHome, members);
+//                    sleepSeconds(SLEEP_BETWEEN_CLUSTER_RESTART_SECONDS);
+//                    startCluster(members);
+//                    sleepMinutes(sleepBetweenRestart);
+//                }
 
             } catch (Exception e) {
                 e.printStackTrace();
