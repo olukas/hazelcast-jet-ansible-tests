@@ -88,10 +88,10 @@ public final class RemoteControllerClient {
         int[] counter = new int[]{0};
         Iterables.cycle(members).forEach(member -> {
             try {
-//                stop(member, jetHome);
-//                sleepMinutes(sleepBetweenRestart);
-//                start(member);
-//                sleepMinutes(sleepBetweenRestart);
+                stop(member, jetHome);
+                sleepMinutes(sleepBetweenRestart);
+                start(member);
+                sleepMinutes(sleepBetweenRestart);
 //
 //                counter[0]++;
 //                if (counter[0] % memberCount == 0) {
