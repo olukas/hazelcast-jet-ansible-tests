@@ -51,7 +51,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 public final class RemoteControllerClient {
 
     private static final int DEFAULT_PORT = 9701;
-    private static final int VERIFICATION_DURATION_GAP = 15;
+    private static final int VERIFICATION_DURATION_GAP = 2;
     private static final int SLEEP_BETWEEN_CLUSTER_RESTART_SECONDS = 30;
     private static final int ASSERTION_RETRY_COUNT = 120;
     private static final String JAVA_PROCESS_CHECK = "jps | grep HazelcastMemberStarter | wc -l";
@@ -88,18 +88,18 @@ public final class RemoteControllerClient {
         int[] counter = new int[]{0};
         Iterables.cycle(members).forEach(member -> {
             try {
-                stop(member, jetHome);
-                sleepMinutes(sleepBetweenRestart);
-                start(member);
-                sleepMinutes(sleepBetweenRestart);
-
-                counter[0]++;
-                if (counter[0] % memberCount == 0) {
+//                stop(member, jetHome);
+//                sleepMinutes(sleepBetweenRestart);
+//                start(member);
+//                sleepMinutes(sleepBetweenRestart);
+//
+//                counter[0]++;
+//                if (counter[0] % memberCount == 0) {
                     shutdownCluster(member, jetHome, members);
                     sleepSeconds(SLEEP_BETWEEN_CLUSTER_RESTART_SECONDS);
                     startCluster(members);
                     sleepMinutes(sleepBetweenRestart);
-                }
+//                }
 
             } catch (Exception e) {
                 e.printStackTrace();
